@@ -2,3 +2,26 @@
   height: 5vh;
   width: 25%;
 }
+.commentContainer {
+  background-color: grey;
+  padding: 2%;
+  margin: 2%;
+  height: 15vh;
+  display: grid;
+  grid-template-columns: 10% 80% 10%;
+}
+.commentContainer > p {
+  font-size: large;
+  font-weight: lighter;
+  background: darkgray;
+}
+.commentContainer > * {
+  padding: 10px;
+}
+.commentContainer > pre {
+  font-weight: bolder;
+  font-size: xx-large;
+}
+#delButton:hover {
+  color: red;
+}

@@ -5,6 +5,7 @@ module.exports = app => {
   const key = require("../config/key.json");
 
   const Posts = require("../controllers/postController");
+  const Comments = require("../controllers/commentController");
 
   app.get("/", (req, res) => {
     res.send("Working Fine!!");
@@ -57,5 +58,41 @@ module.exports = app => {
     let decodedData = jwt.verify(id, key.tokenKey);
     let resp = Posts.addPosts(decodedData.id, req.body.text, req.body.image);
     res.send(resp);
+  });
+
+  app.post("/commentadd", (req, res) => {
+    let pid = req.body.pid;
+    let uid = jwt.verify(req.body.uid, key.tokenKey).id;
+    let text = req.body.text;
+    let resp = Comments.addComments(pid, uid, text);
+    res.send(resp);
+  });
+
+  app.post("/comments", (req, res) => {
+    Comments.getComments().then(resp => {
+      res.send(resp);
+    });
+  });
+
+  app.post("/getuser", (req, res) => {
+    let uid = jwt.verify(req.body.id, key.tokenKey).id;
+    users
+      .findAll({
+        attributes: ["name"],
+        where: { id: uid }
+      })
+      .then(prom => {
+        res.send(prom);
+      });
+  });
+
+  app.post("/deletecomment", (req, res) => {
+    let pid = req.body.pid;
+    let uid = req.body.uid;
+    let text = req.body.text;
+    Comments.deleteComments(pid, uid, text);
+    Comments.getComments().then(resp => {
+      res.send(resp);
+    });
   });
 };

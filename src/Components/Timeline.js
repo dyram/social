@@ -23,10 +23,11 @@ export class Timeline extends Component {
   };
 
   getPosts = id => {
+    let self = this;
     Axios.post("http://localhost:3030/timeline", {
       uid: id
     }).then(res => {
-      this.setState({ posts: res.data });
+      self.setState({ posts: res.data });
     });
   };
 
@@ -41,13 +42,15 @@ export class Timeline extends Component {
   };
 
   addPost = e => {
-    console.log(this.state);
+    let self = this;
     Axios.post("http://localhost:3030/timelineadd", {
       uid: this.state.uid,
       text: this.state.postDesc,
       image: this.state.image
-    }).then(this.getPosts(this.state.uid));
+    }).then(self.getPosts(this.state.uid));
   };
+
+  editUser = e => {};
 
   imageUpload = e => {
     const file = e.target.files[0];
@@ -62,8 +65,10 @@ export class Timeline extends Component {
         <div className="loginSignupFormHeader">
           <h1>Timeline</h1>
           <button onClick={e => this.toggleModal(e)}>Add Post</button>
+          <button onClick={e => this.editUser(e)}>Edit User</button>
           <button
             onClick={() => {
+              localStorage.removeItem("userToken");
               this.props.history.push("/login");
             }}
           >
@@ -126,7 +131,11 @@ export class Timeline extends Component {
               ></img>
               <h4>{postz.user}</h4>
               <p>{postz.text}</p>
-              <Comments posts={this.state.posts} />
+              <Comments
+                posts={this.state.posts}
+                index={index + 1}
+                uid={this.state.uid}
+              />
             </div>
           ))}
         </div>
