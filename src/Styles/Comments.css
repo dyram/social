@@ -3,25 +3,59 @@
   width: 25%;
 }
 .commentContainer {
-  background-color: grey;
+  background-color: white;
+  color: black;
   padding: 2%;
-  margin: 2%;
-  height: 15vh;
+  height: 5vh;
   display: grid;
-  grid-template-columns: 10% 80% 10%;
+  grid-template-columns: 85% 10%;
 }
-.commentContainer > p {
+.commentContainer > div > p {
   font-size: large;
-  font-weight: lighter;
-  background: darkgray;
+  color: gray;
 }
 .commentContainer > * {
   padding: 10px;
 }
-.commentContainer > pre {
+.commentContainer > div > pre {
   font-weight: bolder;
-  font-size: xx-large;
+  font-size: large;
+  color: black;
 }
 #delButton:hover {
   color: red;
+}
+#likeButton:hover {
+  background-color: green;
+  color: white;
+}
+#comLikeButton:hover {
+  background: none;
+}
+.commentBs {
+  display: flex;
+  flex-direction: row;
+}
+.commentsList {
+  background: white;
+  height: 45vh;
+  overflow: scroll;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+.commentsList > .commentsListHeader > p {
+  color: black;
+  padding: 3%;
+  text-transform: uppercase;
+  letter-spacing: 17px;
+  font-size: large;
+}
+
+.commentsList > .commentsListHeader {
+  position: sticky;
+  top: 0;
+  background: white;
+}
+#comLikeButton:hover path {
+  fill: red;
 }

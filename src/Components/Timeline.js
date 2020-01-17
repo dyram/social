@@ -9,7 +9,8 @@ export class Timeline extends Component {
     uid: "",
     posts: [],
     postDesc: "",
-    image: ""
+    image: "",
+    editName: ""
   };
 
   change = e => {
@@ -41,6 +42,12 @@ export class Timeline extends Component {
     else modal.style.display = "none";
   };
 
+  editModal = e => {
+    let modal = this.editMod;
+    if (modal.style.display === "none") modal.style.display = "block";
+    else modal.style.display = "none";
+  };
+
   addPost = e => {
     let self = this;
     Axios.post("http://localhost:3030/timelineadd", {
@@ -50,7 +57,13 @@ export class Timeline extends Component {
     }).then(self.getPosts(this.state.uid));
   };
 
-  editUser = e => {};
+  editUser = e => {
+    let self = this;
+    Axios.post("http://localhost:3030/edituser", {
+      uid: this.state.uid,
+      name: this.state.editName
+    });
+  };
 
   imageUpload = e => {
     const file = e.target.files[0];
@@ -65,7 +78,7 @@ export class Timeline extends Component {
         <div className="loginSignupFormHeader">
           <h1>Timeline</h1>
           <button onClick={e => this.toggleModal(e)}>Add Post</button>
-          <button onClick={e => this.editUser(e)}>Edit User</button>
+          <button onClick={e => this.editModal(e)}>Edit User</button>
           <button
             onClick={() => {
               localStorage.removeItem("userToken");
@@ -74,6 +87,40 @@ export class Timeline extends Component {
           >
             Logout
           </button>
+        </div>
+
+        {/* Edit Modal */}
+        <div
+          ref={modal => (this.editMod = modal)}
+          className="modal"
+          id="postModal"
+          style={{ display: "none" }}
+        >
+          <div className="popup">
+            <h2>Edit Details</h2>
+            <button
+              id="closeButton"
+              onClick={e => this.editModal(e)}
+              className="close"
+            >
+              &times;
+            </button>
+            <div className="content">
+              <input
+                type="text"
+                placeholder="Change Username"
+                className="inputs"
+                name="editName"
+                value={this.state.editName}
+                onChange={e => this.change(e)}
+              ></input>
+              <br />
+              <br />
+              <button onClick={e => this.editUser(e)} id="modalPostButton">
+                Done
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Modal */}

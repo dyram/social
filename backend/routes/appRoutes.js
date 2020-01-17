@@ -6,6 +6,7 @@ module.exports = app => {
 
   const Posts = require("../controllers/postController");
   const Comments = require("../controllers/commentController");
+  const Users = require("../controllers/editUserController");
 
   app.get("/", (req, res) => {
     res.send("Working Fine!!");
@@ -94,5 +95,12 @@ module.exports = app => {
     Comments.getComments().then(resp => {
       res.send(resp);
     });
+  });
+
+  app.post("/edituser", (req, res) => {
+    let uid = jwt.verify(req.body.uid, key.tokenKey).id;
+    let name = req.body.name;
+    let resp = Users.editUser(uid, name);
+    console.log(resp);
   });
 };
