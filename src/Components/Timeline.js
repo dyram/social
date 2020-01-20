@@ -60,8 +60,8 @@ export class Timeline extends Component {
   editUser = e => {
     let self = this;
     Axios.post("http://localhost:3030/edituser", {
-      uid: this.state.uid,
-      name: this.state.editName
+      uid: self.state.uid,
+      name: self.state.editName
     });
   };
 
@@ -176,7 +176,7 @@ export class Timeline extends Component {
                 alt="noImage"
                 style={{ width: "20%" }}
               ></img>
-              <h4>{postz.user}</h4>
+              <h4>{postz.User.name}</h4>
               <p>{postz.text}</p>
               <Comments
                 posts={this.state.posts}

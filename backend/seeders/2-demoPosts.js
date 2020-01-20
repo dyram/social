@@ -5,18 +5,18 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert("posts", [
       {
-        user: "John Doe",
         text: "Text 1",
         image: image.code,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        UserId: 1
       },
       {
-        user: "Jane Doe",
         text: "text2",
         image: image.code,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        UserId: 1
       }
     ]);
   },

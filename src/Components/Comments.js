@@ -10,7 +10,8 @@ export class Comments extends Component {
     comment: "",
     posts: [],
     user: "",
-    likes: 0
+    likes: 0,
+    likeText: "Like"
   };
 
   toggleComment = e => {
@@ -32,7 +33,8 @@ export class Comments extends Component {
     this.setState({ posts: this.props.posts });
     this.getDetails();
     this.getUser();
-    this.likeButtonText();
+    this.getLikes();
+    this.countLikes(this.props.index);
   }
 
   getDetails = async () => {
@@ -43,6 +45,13 @@ export class Comments extends Component {
     let self = this;
     Axios.post("http://localhost:3030/comments").then(res => {
       self.setState({ comments: res.data });
+    });
+  };
+
+  getLikes = () => {
+    let self = this;
+    Axios.post("http://localhost:3030/getlikes").then(res => {
+      console.log("Get like ", res.data);
     });
   };
 
@@ -67,18 +76,38 @@ export class Comments extends Component {
       id: this.state.uid
     }).then(res => {
       self.setState({ user: res.data[0].name });
-      console.log(self.state);
+    });
+  };
+
+  countLikes = (pid, uid) => {
+    Axios.post("http://localhost:3030/countlike", {
+      pid: pid
+    }).then(res => {
+      this.setState({ likes: res.data.count });
     });
   };
 
   likeClicked = e => {
-    console.log("like clicked");
-    this.likeButtonText();
-  };
-
-  likeButtonText = () => {
-    if (this.state.likes === 0) return "Like";
-    else return "Unlike";
+    let self = this;
+    let pid = this.props.index;
+    let uid = this.state.uid;
+    if (this.state.likeText === "Like") {
+      self.setState({ likeText: "Unlike" });
+      Axios.post("http://localhost:3030/addlike", {
+        pid: pid,
+        uid: uid
+      }).then(res => {
+        self.countLikes(pid);
+      });
+    } else {
+      self.setState({ likeText: "Like" });
+      Axios.post("http://localhost:3030/deletelike", {
+        pid: pid,
+        uid: uid
+      }).then(res => {
+        self.countLikes(pid);
+      });
+    }
   };
 
   render() {
@@ -106,7 +135,7 @@ export class Comments extends Component {
           </button>
           &nbsp;&nbsp;&nbsp;
           <button id="likeButton" onClick={e => this.likeClicked(e)}>
-            {this.likeButtonText()}
+            {this.state.likeText}
           </button>
         </div>
 
@@ -146,10 +175,10 @@ export class Comments extends Component {
           </div>
           {this.state.comments.map((comms, index) => (
             <div style={{ color: "white" }} key={index}>
-              {this.props.index === comms.pid ? (
+              {this.props.index === comms.postId ? (
                 <div className="commentContainer">
                   <div>
-                    <pre>{comms.user}</pre>
+                    <pre>{comms.User.name}</pre>
                     <p>{comms.text}</p>
                   </div>
                   <div className="commentBs">
@@ -165,10 +194,10 @@ export class Comments extends Component {
                         fontSize: "20px",
                         background: "none",
                         display:
-                          comms.user === this.state.user ? "block" : "none"
+                          comms.User.name === this.state.user ? "block" : "none"
                       }}
                       onClick={e => {
-                        this.delCom(comms.uid, comms.pid, comms.text);
+                        this.delCom(comms.UserId, comms.postId, comms.text);
                       }}
                     >
                       <svg viewBox="0 0 25 25" width="30">

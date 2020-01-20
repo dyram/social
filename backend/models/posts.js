@@ -3,7 +3,6 @@ module.exports = (sequelize, DataTypes) => {
   const posts = sequelize.define(
     "posts",
     {
-      user: DataTypes.STRING,
       text: DataTypes.STRING,
       image: DataTypes.TEXT
     },
@@ -11,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
   );
   posts.associate = function(models) {
     // associations can be defined here
+    posts.belongsTo(models.Users);
+    posts.hasMany(models.Comments);
+    posts.hasMany(models.Likes);
   };
   return posts;
 };

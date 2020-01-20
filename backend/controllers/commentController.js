@@ -5,31 +5,33 @@ const Comment = model.Comments;
 Comments = () => {};
 
 Comments.addComments = (pid, uid, text) => {
-  let name;
-  User.findAll({
-    attributes: ["name"],
-    where: { id: uid }
-  }).then(res => {
-    name = res[0].name;
-    console.log("Comments : ", pid, uid, text);
-    let promise = Comment.create({
-      pid: pid,
-      uid: uid,
-      user: name,
-      text: text
-    });
-    return promise;
+  let promise = Comment.create({
+    text: text,
+    postId: pid,
+    UserId: uid
   });
+  return promise;
 };
 
 Comments.deleteComments = (pid, uid, text) => {
   Comment.destroy({
-    where: { pid: pid, uid: uid, text: text }
+    where: { postId: pid, UserId: uid, text: text }
   });
 };
 
 Comments.getComments = async () => {
-  let promise = await Comment.findAll();
+  let promise = await Comment.findAll({
+    include: [
+      {
+        model: User,
+        attributes: ["name"]
+      },
+      {
+        model: model.posts,
+        attributes: ["id"]
+      }
+    ]
+  });
   return promise;
 };
 

@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
   );
   Users.associate = function(models) {
     // associations can be defined here
+    Users.hasMany(models.posts);
+    Users.hasMany(models.Comments);
+    Users.hasMany(models.Likes);
   };
   return Users;
 };

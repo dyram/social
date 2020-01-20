@@ -7,6 +7,7 @@ module.exports = app => {
   const Posts = require("../controllers/postController");
   const Comments = require("../controllers/commentController");
   const Users = require("../controllers/editUserController");
+  const Likes = require("../controllers/likeController");
 
   app.get("/", (req, res) => {
     res.send("Working Fine!!");
@@ -101,6 +102,33 @@ module.exports = app => {
     let uid = jwt.verify(req.body.uid, key.tokenKey).id;
     let name = req.body.name;
     let resp = Users.editUser(uid, name);
-    console.log(resp);
+  });
+
+  app.post("/addlike", async (req, res) => {
+    let pid = req.body.pid;
+    let uid = jwt.verify(req.body.uid, key.tokenKey).id;
+    let resp = await Likes.addLikes(pid, uid);
+    res.send(resp);
+  });
+
+  app.post("/getlikes", (req, res) => {
+    Likes.getLikes().then(resp => {
+      res.send(resp);
+    });
+  });
+
+  app.post("/deletelike", async (req, res) => {
+    let pid = req.body.pid;
+    let uid = jwt.verify(req.body.uid, key.tokenKey).id;
+    Likes.deleteLikes(pid, uid);
+    Likes.getLikes().then(resp => {
+      res.send(resp);
+    });
+  });
+
+  app.post("/countlike", async (req, res) => {
+    let pid = req.body.pid;
+    let count = await Likes.countLikes(pid);
+    res.send(count);
   });
 };
