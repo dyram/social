@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Axios from "axios";
 import "../Styles/Timeline.css";
+import "../Styles/Private.css";
 import { withRouter } from "react-router-dom";
-import { Comments } from "../Components/Comments";
 
-export class Timeline extends Component {
+export class Private extends Component {
   state = {
     uid: "",
     posts: [],
@@ -25,7 +25,7 @@ export class Timeline extends Component {
 
   getPosts = id => {
     let self = this;
-    Axios.post("http://localhost:3030/timeline", {
+    Axios.post("http://localhost:3030/timelinePrivate", {
       uid: id
     }).then(res => {
       self.setState({ posts: res.data });
@@ -50,7 +50,7 @@ export class Timeline extends Component {
 
   addPost = e => {
     let self = this;
-    Axios.post("http://localhost:3030/timelineadd", {
+    Axios.post("http://localhost:3030/timelineaddprivate", {
       uid: this.state.uid,
       text: this.state.postDesc,
       image: this.state.image
@@ -71,20 +71,19 @@ export class Timeline extends Component {
       this.setState({ image: base64 });
     }, console.log(this.state));
   };
-
   render() {
     return (
       <div>
         <div className="loginSignupFormHeader">
-          <h1>Timeline</h1>
+          <h1>Private</h1>
           <button onClick={e => this.toggleModal(e)}>Add Post</button>
           <button onClick={e => this.editModal(e)}>Edit User</button>
           <button
             onClick={() => {
-              this.props.history.push("/private");
+              this.props.history.push("/timeline");
             }}
           >
-            Private
+            Public
           </button>
           <button
             onClick={() => {
@@ -95,6 +94,13 @@ export class Timeline extends Component {
             Logout
           </button>
         </div>
+
+        <span className="privateWelcome">
+          <i>
+            Welcome to your <span>private space</span>
+          </i>
+        </span>
+        <br />
 
         {/* Edit Modal */}
         <div
@@ -185,11 +191,6 @@ export class Timeline extends Component {
               ></img>
               <h4>{postz.User.name}</h4>
               <p>{postz.text}</p>
-              <Comments
-                posts={this.state.posts}
-                index={index + 1}
-                uid={this.state.uid}
-              />
             </div>
           ))}
         </div>
@@ -207,4 +208,4 @@ const getBase64 = file => {
   });
 };
 
-export default withRouter(Timeline);
+export default withRouter(Private);

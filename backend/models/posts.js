@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     "posts",
     {
       text: DataTypes.STRING,
-      image: DataTypes.TEXT
+      image: DataTypes.TEXT,
+      publicPost: DataTypes.BOOLEAN
     },
     {}
   );

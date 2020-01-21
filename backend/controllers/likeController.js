@@ -11,7 +11,9 @@ Likes.addLikes = (pid, uid) => {
 };
 
 Likes.getLikes = async () => {
-  let promise = await Like.findAll();
+  let promise = await Like.findAll({
+    attributes: ["UserId", "postId", "isLiked"]
+  });
   return promise;
 };
 

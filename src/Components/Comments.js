@@ -11,7 +11,8 @@ export class Comments extends Component {
     posts: [],
     user: "",
     likes: 0,
-    likeText: "Like"
+    likeText: "Like",
+    likedPosts: []
   };
 
   toggleComment = e => {
@@ -52,6 +53,7 @@ export class Comments extends Component {
     let self = this;
     Axios.post("http://localhost:3030/getlikes").then(res => {
       console.log("Get like ", res.data);
+      self.setState({ likedPosts: res.data });
     });
   };
 
@@ -108,6 +110,11 @@ export class Comments extends Component {
         self.countLikes(pid);
       });
     }
+  };
+
+  checkLikes = () => {
+    let posts = this.state.likedPosts;
+    posts.map();
   };
 
   render() {

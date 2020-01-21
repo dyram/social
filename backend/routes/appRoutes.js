@@ -27,7 +27,13 @@ module.exports = app => {
         var token;
         if (val) {
           token = {
-            id: jwt.sign({ id: prom[0].id }, key.tokenKey),
+            id: jwt.sign(
+              {
+                exp: Date.now() / 1000 + 60 * 60,
+                id: prom[0].id
+              },
+              key.tokenKey
+            ),
             validity: true
           };
         } else {
@@ -130,5 +136,18 @@ module.exports = app => {
     let pid = req.body.pid;
     let count = await Likes.countLikes(pid);
     res.send(count);
+  });
+
+  app.post("/timelineaddprivate", (req, res) => {
+    let uid = jwt.verify(req.body.uid, key.tokenKey).id;
+    Posts.addPostsPrivate(uid, req.body.text, req.body.image).then(resp => {
+      res.send(resp);
+    });
+  });
+
+  app.post("/timelinePrivate", (req, res) => {
+    Posts.getPostsPrivate().then(resp => {
+      res.send(resp);
+    });
   });
 };

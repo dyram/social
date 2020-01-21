@@ -14,6 +14,9 @@ module.exports = {
       image: {
         type: Sequelize.TEXT
       },
+      publicPost: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
